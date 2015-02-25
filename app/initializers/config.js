@@ -4,7 +4,11 @@ var config = Ember.Object.extend({
   auth: Ember.computed(function() {
     return this.firebase.getAuth();
   }),
-  firebase: new Firebase("https://<your app>.firebaseio.com")
+
+  logout: function() {
+    this.set('auth', null);
+  },
+  firebase: new Firebase("https://dazzling-fire-9441.firebaseio.com")
 });
 
 export function initialize(container, application) {

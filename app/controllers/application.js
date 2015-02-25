@@ -5,19 +5,21 @@ export default Ember.Controller.extend({
   email: Ember.computed.alias('auth.password.email'),
 
   loggedOut: Ember.computed.not('auth.token'),
+  loggedIn: Ember.computed.not('loggedOut'),
 
   me: function() {
-    return this.store.find('user', this.get('auth.uid'));
+    var id = this.get('auth.uid');
+    if (id) {
+      return this.store.find('user', id);
+    }
   }.property('auth.uid'),
 
-  user: function() {
-    return {
-      email: this.get('email'),
-      password: this.get('password')
-    };
-  }.property('email', 'password'),
-  
   login: {
+    email: '',
+    password: ''
+  },
+
+  register: {
     email: '',
     password: ''
   },
@@ -33,7 +35,15 @@ export default Ember.Controller.extend({
   },
 
   callback: function(error, user) {
-    if (user) { this._login(this.get('user')); }
+    if (user) {
+      this._login(this.get('register'));
+      this.store.createRecord('user', {
+        id: user.uid,
+        created: new Date().getTime()
+      }).save().then(function(user) {
+        this.set('me', user);
+      }.bind(this));
+    }
 
     if (error) {
       this.set('error', error);
@@ -42,27 +52,21 @@ export default Ember.Controller.extend({
 
   actions: {
     createAccount: function() {
-      this.config.firebase.createUser(this.get('user'), this.callback.bind(this));
+      this.config.firebase.createUser(this.get('register'), this.callback.bind(this));
     },
 
     login: function() {
       this._login(this.get('login'));
     },
 
+    logout: function() {
+      this.config.logout();
+    },
+
     submitMyName: function() {
-      var create = function() {
-        this.store.createRecord('user', {
-          id: this.get('config.auth.uid'),
-          name: this.get('name')
-        }).save();
-      }.bind(this);
-
-      var update = function(user) {
-        user.set('name', this.get('name'));
-        user.save();
-      }.bind(this);
-
-      this.store.find('user', this.get('auth.uid')).then(update, create);
+      var me = this.get('me');
+      me.set('name', this.get('name'));
+      me.save();
     }
   }
 });

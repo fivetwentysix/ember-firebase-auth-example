@@ -18,8 +18,8 @@
   <form {{action "createAccount" on="submit"}}>
     <h3>Register</h3>
     {{#if error}}<p class="error">{{error}}</p>{{/if}}
-    {{input placeholder="email" value=email}}
-    {{input placeholder="password" value=password type="password"}}
+    {{input placeholder="email" value=register.email}}
+    {{input placeholder="password" value=register.password type="password"}}
     <button type="submit" {{bind-attr disabled=isLoading}}>Register</button>
   </form>
 
@@ -32,11 +32,15 @@
   </form>
 {{else}}
 
-  {{#if me}}
+  {{#if loggedIn}}
+    <button {{action "logout"}}>Logout</button>
+  {{/if}}
+  {{#if me.name}}
     <p>Welcome back {{me.name}}.</p>
   {{else}}
     <form {{action "submitMyName" on="submit"}}>
       <h3>What should I call you?</h3>
+      {{#if error}}<p class="error">{{error}}</p>{{/if}}
       {{input value=name}}
       <button type="submit" {{bind-attr disabled=isLoading}}>Submit</button>
     </form>
