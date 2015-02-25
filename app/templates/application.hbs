@@ -1,3 +1,44 @@
-<h2 id="title">Welcome to Ember.js</h2>
+{{#if loggedOut}}
+  <div class="section">
+    <h1>Tradehouse</h1>
 
-{{outlet}}
+    <p>
+      instant hackathons with rated developers.
+    </p>
+  </div>
+
+  <div class="section" style="background: #123444;">
+    <h2>How it works</h2>
+
+    <p>
+      Use our matchmaking service to pair with 3 other developers.
+    </p>
+  </div>
+
+  <form {{action "createAccount" on="submit"}}>
+    <h3>Register</h3>
+    {{#if error}}<p class="error">{{error}}</p>{{/if}}
+    {{input placeholder="email" value=email}}
+    {{input placeholder="password" value=password type="password"}}
+    <button type="submit" {{bind-attr disabled=isLoading}}>Register</button>
+  </form>
+
+  <form {{action "login" on="submit"}}>
+    <h3>Login</h3>
+    {{#if login.error}}<p class="error">{{login.error}}</p>{{/if}}
+    {{input placeholder="email" value=login.email}}
+    {{input placeholder="password" value=login.password type="password"}}
+    <button type="submit" {{bind-attr disabled=isLoading}}>Login</button>
+  </form>
+{{else}}
+
+  {{#if me}}
+    <p>Welcome back {{me.name}}.</p>
+  {{else}}
+    <form {{action "submitMyName" on="submit"}}>
+      <h3>What should I call you?</h3>
+      {{input value=name}}
+      <button type="submit" {{bind-attr disabled=isLoading}}>Submit</button>
+    </form>
+  {{/if}}
+{{/if}}

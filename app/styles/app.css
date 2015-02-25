@@ -1,0 +1,42 @@
+* {
+  padding: 0;
+  margin: 0;
+
+  font-family: helvetica;
+}
+
+body {
+  padding: 20px;
+}
+
+h1 {
+  color: #121212;
+}
+
+h1, h2, h3 {
+  margin-bottom: 0.5em;
+  font-weight: 800;
+}
+
+p {
+  margin-bottom: 10px;
+}
+
+form {
+  background: black;
+  margin-bottom: 1em;
+  padding: 20px;
+  color: white;
+}
+
+.section {
+  height: 80px;
+  padding: 20px;
+  background: #006DFF;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.error {
+  color: red;
+}
